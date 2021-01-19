@@ -2,6 +2,8 @@
 # Test Processing II  #
 #######################
 
+import re
+
 
 def digits_to_words(input_string):
     """
@@ -28,7 +30,21 @@ def digits_to_words(input_string):
             >>> tp2.digits_to_words(digits_str2)
             'three one four one five'
     """
-    digit_string = None
+    pronounce = {
+        "0": "zero",
+        "1": "one",
+        "2": "two",
+        "3": "three",
+        "4": "four",
+        "5": "five",
+        "6": "six",
+        "7": "seven",
+        "8": "eight",
+        "9": "nine",
+    }
+    p = re.compile("[0-9]")
+    digit_parsed = p.findall(input_string)
+    digit_string = " ".join(list(map(lambda x: pronounce[x], digit_parsed)))
     return digit_string
 
 
@@ -64,5 +80,22 @@ def to_camel_case(underscore_str):
             >>> tp2.to_camel_case(underscore_str3)
             "alreadyCamel"
     """
-    camelcase_str = None
+    UNDER_SCORE = "_"
+    if UNDER_SCORE in underscore_str:
+        name_parsed = [
+            (idx, x)
+            for idx, x in enumerate(
+                list(filter(lambda x: len(x) > 0, underscore_str.split(UNDER_SCORE)))
+            )
+        ]
+        camelcase_str = "".join(
+            list(
+                map(
+                    lambda x: x[-1].capitalize() if x[0] > 0 else x[-1].lower(),
+                    name_parsed,
+                )
+            )
+        )
+    else:
+        camelcase_str = underscore_str
     return camelcase_str
